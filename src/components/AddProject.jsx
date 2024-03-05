@@ -30,11 +30,15 @@ function AddProject() {
 
     useEffect(() => {
         const existingUser = JSON.parse(localStorage.getItem("currentUser"));
-        setPetDetails({ ...petDetails, userid: existingUser._id });
-        if (localStorage.getItem("token")) {
-            setToken(localStorage.getItem("token"));
+        if(existingUser){
+            setPetDetails({ ...petDetails, userid: existingUser._id });
+            console.log(existingUser._id);
+            if (localStorage.getItem("token")) {
+                setToken(localStorage.getItem("token"));
+            }
         }
-    }, []);
+       
+    }, [petDetails.userid]);
     // console.log(petDetails);
 
     const [preview, setPreview] = useState("");

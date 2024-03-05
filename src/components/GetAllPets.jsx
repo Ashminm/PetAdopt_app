@@ -77,25 +77,68 @@ function GetAllPets() {
         }
     }, []);
 
-    const HandleCart = (pname, breed, amount, userid) => {
-        const cartdata = { pname, breed, amount, userid };
+    // const HandleCart = (pname, breed, amount, userid) => {
+    //     const cartdata = { pname, breed, amount, userid };
 
-        if (cartdata.pname && cartdata.breed && cartdata.amount && cartdata.userid) {
-            setCart((prevCart) => [...prevCart, cartdata]);
-            alert("Item is added to cart");
+    //     if (cartdata.pname && cartdata.breed && cartdata.amount && cartdata.userid) {
+    //         setCart((prevCart) => [...prevCart, cartdata]);
+    //         toast.success("Item is added to cart!!",{
+    //             style: {
+    //               borderRadius: '10px',
+    //               background: '#333',
+    //               color: '#FFFF',
+    //             },
+    //           });
+    //     } else {
+    //         toast.error("Item added failed!!",{
+    //             style:{
+    //               borderRadius: '10px',
+    //               background:"#333",
+    //               color:'#bb2124'
+    //             }
+    //           });
+    //     }
+    // };
+    const HandleCart = (pname, breed, amount, userid) => {
+        const existingItem = cart.find(item => item.pname === pname && item.breed === breed);
+    
+        if (existingItem) {
+            toast.error("Item already exists in the cart!", {
+                style: {
+                    borderRadius: '10px',
+                    background: "#333",
+                    color: '#FFF'
+                }
+            });
         } else {
-            alert("Item add failed");
+            const cartdata = { pname, breed, amount, userid };
+            if (cartdata.pname && cartdata.breed && cartdata.amount && cartdata.userid) {
+                setCart((prevCart) => [...prevCart, cartdata]);
+                toast.success("Item is added to cart!!", {
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#FFFF',
+                    },
+                });
+            } else {
+                toast.error("Item added failed!!", {
+                    style: {
+                        borderRadius: '10px',
+                        background: "#333",
+                        color: '#bb2124'
+                    }
+                });
+            }
         }
     };
-
-
-    console.log(cart);
+    // console.log(cart);
     return (
         <div>
             <div className=" d-flex justify-content-end container mb-5">
-                <Link to={"/cart"} className="text-decoration-none text-dark">
-                    <i class="fa-solid fa-cart-shopping" style={{ fontSize: "26px" }}></i>
-                    <span className="ms-2 ">3</span>
+                <Link to={"/cart"} className="text-decoration-none border p-3 text-dark" style={{borderRadius:'50%'}}>
+                    <i class="fa-solid fa-cart-shopping" style={{ fontSize: "16px" }}></i>
+                    <span className="text-light ps-2 pe-2 p-1 bg-dark " style={{borderRadius:"50%",position:'absolute',fontSize:'12px'}}>{cart.length}</span>
                 </Link>
             </div>
             <div>
@@ -136,8 +179,7 @@ function GetAllPets() {
                                         <img
                                             src={`${BASE_URL}/upload/${item.p_image}`}
                                             alt="image"
-                                            className="shadow"
-                                            style={{ borderRadius: "50%", width: "100%", height: "75%" }}
+                                            className="shadow rounded"
                                         />
                                     </Col>
                                     <Col sm="12" md="7">
@@ -172,15 +214,16 @@ function GetAllPets() {
                                         <h5>₹{item.amount}</h5>
                                     </Col>
                                     <Col sm="12" md="2">
-                                        <h3 className="pt-2">{item.pId}</h3>
+                                        <h3 className="pt-2" title="Pet LicenceID">{item.pId}</h3>
                                         <h5>
-                                            <Badge bg="success p-2">{item.status}</Badge>
+                                            <Badge bg="success p-2" title="Pet Status">{item.status}</Badge>
                                         </h5>
 
                                         <div className="d-flex justify-content-between">
                                         
-                                            <button className="btn btn-danger"  onClick={()=>HandleCart(item.pname,item.breed,item.amount,item.userid)}>Add to cart</button>
+                                            <button className="btn border border-danger btn-warning" title="Add to cart"  onClick={()=>HandleCart(item.pname,item.breed,item.amount,item.userid,item.p_image)}>Add to cart</button>
                                             <button
+                                            title="Delete"
                                                 className="btn"
                                                 onClick={() => {
                                                     handleDelete(item._id);
@@ -192,7 +235,7 @@ function GetAllPets() {
                                         
                                         
                                     </Col>
-                                    <Col sm='12' md='1' className="d-flex align-items-end justify-content-end">
+                                    <Col sm='12' md='1' className="d-flex align-items-end justify-content-end" title="Edit Pet Details">
                                         <EditProject pet={item}/>
                                     </Col>
                                 </Row>
