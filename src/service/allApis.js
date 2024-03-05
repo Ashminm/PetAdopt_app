@@ -44,6 +44,10 @@ export const editPetApi=async(headers,body,id)=>{
     return await commonApi("PUT",`${BASE_URL}/pet/editpet/${id}`,body,headers)
 }
 
+// export const cartPetApi=async(headers,body,id)=>{
+//     return await commonApi("PUT",`${BASE_URL}/pet/editpet/${id}`,body,headers)
+// }
+
 
 
 

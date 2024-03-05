@@ -6,13 +6,14 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import EditProject from "./EditProject";
 import { addPetResponseContect } from "../context/ContextShare";
+import Cart from "./Cart";
 
 function GetAllPets() {
     const [search, setSearch] = useState("");
 
     const [token, setToken] = useState("");
     const [allPet, setAllPet] = useState([]);
-    const [cart,setCart]=useState([])
+    const [cart, setCart] = useState([]);
 
     const {addPetResponse,setAddPetResponse}=useContext(addPetResponseContect)
 
@@ -64,13 +65,29 @@ function GetAllPets() {
               });
         }
     };
+    useEffect(() => {
+        localStorage.setItem("currentUser", JSON.stringify(cart));
+      }, [cart]);
+    
+      useEffect(() => {
+        const storedData = localStorage.getItem("currentUser");
+        if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            setCart(parsedData);
+        }
+    }, []);
 
-    const HandleCart=(pname,breed,amount,userid)=>{
-        let data={pname,breed,amount}
-        toast.success("cart Added")
-       setCart({...cart,data})
-       
-    }
+    const HandleCart = (pname, breed, amount, userid) => {
+        const cartdata = { pname, breed, amount, userid };
+
+        if (cartdata.pname && cartdata.breed && cartdata.amount && cartdata.userid) {
+            setCart((prevCart) => [...prevCart, cartdata]);
+            alert("Item is added to cart");
+        } else {
+            alert("Item add failed");
+        }
+    };
+
 
     console.log(cart);
     return (
@@ -187,6 +204,10 @@ function GetAllPets() {
                         <p className="text-danger text-center p-5 h4">please wait. Loading....</p>
                     )}
                 </div>
+               
+            </div>
+            <div className="">
+            <Cart cart={cart} />
             </div>
         </div>
     );
