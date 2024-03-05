@@ -15,13 +15,16 @@ function Cart({ cart }) {
     }, []);
     useEffect(() => {
        
-        setCartItems({
+        setCartItems([
+          ...cartItems,
+       
+          {
             pname: cart.pname || "",
             breed: cart.breed || "",
             amount: cart.amount || "",
             p_image: cart.p_image || "",
             userid: cart.userid || "",
-        });
+        }, ]);
     }, [cart]);
 
 
@@ -29,10 +32,9 @@ function Cart({ cart }) {
     const handleRemove = (userid) => {
       const updatedCart = cartItems.filter((item) => item.userid !== userid);
       setCartItems(updatedCart);
-  };
-  console.log(cartItems);
-
-    
+    };
+  
+    console.log(cartItems);
 
     return (
         <div className="mt-5 container">

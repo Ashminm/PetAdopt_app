@@ -77,6 +77,7 @@ function GetAllPets() {
         }
     }, []);
 
+    // console.log(cart);
     // const HandleCart = (pname, breed, amount, userid) => {
     //     const cartdata = { pname, breed, amount, userid };
 
