@@ -32,7 +32,7 @@ function AddProject() {
         const existingUser = JSON.parse(localStorage.getItem("currentUser"));
         if(existingUser){
             setPetDetails({ ...petDetails, userid: existingUser._id });
-            console.log(existingUser._id);
+            // console.log(existingUser._id);
             if (localStorage.getItem("token")) {
                 setToken(localStorage.getItem("token"));
             }
@@ -244,13 +244,13 @@ function AddProject() {
                                 <option value="Dog">Dog</option>
                                 <option value="Cat">Cat</option>
                                 <option value="Deer">Deer</option>
+                                <option value="Deer">Squral</option>
                             </Form.Select>
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput4">
                                 <Form.Control
                                     type="text"
                                     placeholder="Pet license ID"
-                                    onChange={(e) => setPetDetails({ ...petDetails, pId: e.target.value })}
-                                    style={{textTransform:'uppercase'}}
+                                    onChange={(e) => setPetDetails({ ...petDetails, pId: e.target.value.toUpperCase() })}
                                 />
                             </Form.Group>
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput5">

@@ -221,8 +221,8 @@ function EditProject({pet}) {
                                     type="text"
                                     placeholder="Pet license ID"
                                     defaultValue={pet.pId}
-                                    onChange={(e)=>setEditPet({...editPet,pId:e.target.value})}
-                                    style={{textTransform:'uppercase'}}
+                                    // onChange={(e)=>setEditPet({...editPet,pId:e.target.value.toUpperCase()})}
+                                    onChange={(e) => setEditPet({ ...editPet, pId: e.target.value.toUpperCase() })}
                                 />
                             </Form.Group>
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput5">

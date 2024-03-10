@@ -73,6 +73,12 @@ function Header({ loginL }) {
                             )}
                             <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
                                 {" "}
+                                <Link to={"/history"} className="text-decoration-none text-dark">
+                                    History
+                                </Link>
+                            </Nav.Link>
+                            <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
+                                {" "}
                                 <Link to={"/Contact"} className="text-decoration-none text-dark">
                                     Contact
                                 </Link>

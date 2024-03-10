@@ -8,14 +8,24 @@ import EditProject from "./EditProject";
 import { addPetResponseContect } from "../context/ContextShare";
 import Cart from "./Cart";
 
+const getLocalItems = () => {
+    let list = localStorage.getItem("CartPets");
+    // console.log(list);
+    if (list) {
+        return JSON.parse(localStorage.getItem("CartPets"));
+    } else {
+        return [];
+    }
+};
+
 function GetAllPets() {
     const [search, setSearch] = useState("");
 
     const [token, setToken] = useState("");
     const [allPet, setAllPet] = useState([]);
-    const [cart, setCart] = useState([]);
+    const [cart, setCart] = useState(getLocalItems());
 
-    const {addPetResponse,setAddPetResponse}=useContext(addPetResponseContect)
+    const { addPetResponse, setAddPetResponse } = useContext(addPetResponseContect);
 
     useEffect(() => {
         if (localStorage.getItem("token")) {
@@ -24,7 +34,7 @@ function GetAllPets() {
     }, []);
     useEffect(() => {
         GetallPets();
-    }, [token, search,addPetResponse]);
+    }, [token, search, addPetResponse]);
 
     const GetallPets = async () => {
         const header = {
@@ -47,117 +57,115 @@ function GetAllPets() {
         const result = await deletePetApi(reqHeader, id);
         if (result.status === 200) {
             GetallPets();
-            toast.success("Pet successfully  deleted!!",{
+            toast.success("Pet successfully  deleted!!", {
                 style: {
-                  borderRadius: '10px',
-                  background: '#333',
-                  color: '#FFFF',
+                    borderRadius: "10px",
+                    background: "#333",
+                    color: "#FFFF",
                 },
-              });
-            // alert("Pet successfully  deleted!!")
+            });
         } else {
-            toast.error("pet deletion failded!!",{
-                style:{
-                  borderRadius: '10px',
-                  background:"#333",
-                  color:'#bb2124'
-                }
-              });
+            toast.error("pet deletion failded!!", {
+                style: {
+                    borderRadius: "10px",
+                    background: "#333",
+                    color: "#bb2124",
+                },
+            });
         }
     };
     useEffect(() => {
-        localStorage.setItem("currentUser", JSON.stringify(cart));
-      }, [cart]);
-    
-      useEffect(() => {
-        const storedData = localStorage.getItem("currentUser");
+        localStorage.setItem("CartPets", JSON.stringify(cart));
+    }, [cart]);
+
+    useEffect(() => {
+        const storedData = localStorage.getItem("CartPets");
         if (storedData) {
             const parsedData = JSON.parse(storedData);
             setCart(parsedData);
         }
     }, []);
 
-    // console.log(cart);
-    // const HandleCart = (pname, breed, amount, userid) => {
-    //     const cartdata = { pname, breed, amount, userid };
+    const HandleCart = (pname, breed, amount, userid, p_image) => {
+        const existingItem = cart.find((item) => item.pname === pname && item.breed === breed);
 
-    //     if (cartdata.pname && cartdata.breed && cartdata.amount && cartdata.userid) {
-    //         setCart((prevCart) => [...prevCart, cartdata]);
-    //         toast.success("Item is added to cart!!",{
-    //             style: {
-    //               borderRadius: '10px',
-    //               background: '#333',
-    //               color: '#FFFF',
-    //             },
-    //           });
-    //     } else {
-    //         toast.error("Item added failed!!",{
-    //             style:{
-    //               borderRadius: '10px',
-    //               background:"#333",
-    //               color:'#bb2124'
-    //             }
-    //           });
-    //     }
-    // };
-    const HandleCart = (pname, breed, amount, userid) => {
-        const existingItem = cart.find(item => item.pname === pname && item.breed === breed);
-    
         if (existingItem) {
             toast.error("Item already exists in the cart!", {
                 style: {
-                    borderRadius: '10px',
+                    borderRadius: "10px",
                     background: "#333",
-                    color: '#FFF'
-                }
+                    color: "#FFF",
+                },
             });
         } else {
-            const cartdata = { pname, breed, amount, userid };
+            const cartdata = { pname, breed, amount, p_image, userid, Id: new Date().getTime().toString() };
             if (cartdata.pname && cartdata.breed && cartdata.amount && cartdata.userid) {
                 setCart((prevCart) => [...prevCart, cartdata]);
                 toast.success("Item is added to cart!!", {
                     style: {
-                        borderRadius: '10px',
-                        background: '#333',
-                        color: '#FFFF',
+                        borderRadius: "10px",
+                        background: "#333",
+                        color: "#FFFF",
                     },
                 });
             } else {
                 toast.error("Item added failed!!", {
                     style: {
-                        borderRadius: '10px',
+                        borderRadius: "10px",
                         background: "#333",
-                        color: '#bb2124'
-                    }
+                        color: "#bb2124",
+                    },
                 });
             }
         }
     };
     // console.log(cart);
+
+    const handleStock=()=>{
+        toast("This item is currently out of stock",
+        {
+          icon: '⚠️',
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#FFFF00',
+          },
+        })
+    }
     return (
         <div>
             <div className=" d-flex justify-content-end container mb-5">
-                <Link to={"/cart"} className="text-decoration-none border p-3 text-dark" style={{borderRadius:'50%'}}>
+                <Link
+                    to={"/cart"}
+                    className="text-decoration-none border p-3 text-dark"
+                    style={{ borderRadius: "50%", cursor: "not-allowed " }}
+                >
                     <i class="fa-solid fa-cart-shopping" style={{ fontSize: "16px" }}></i>
-                    <span className="text-light ps-2 pe-2 p-1 bg-dark " style={{borderRadius:"50%",position:'absolute',fontSize:'12px'}}>{cart.length}</span>
+                    <span
+                        className="text-light ps-2 pe-2 p-1 bg-dark "
+                        style={{ borderRadius: "50%", position: "absolute", fontSize: "12px" }}
+                    >
+                        {cart.length}
+                    </span>
                 </Link>
             </div>
             <div>
                 <div className=" d-flex justify-content-between container mb-4">
-                    <div className="" style={{borderRadius:"30px",border:'2px solid #49274A',outline:'none'}}>
-                    <i class="fa-solid fa-magnifying-glass ps-3 "></i>
+                    <div className="w-75">
                         <input
                             type="search"
                             placeholder="Search breed and all"
-                            className=" p-3" style={{border:'none',outline:'none'}}
+                            className=" p-2 icon ps-4 border border-secondary"
+                            style={{ outline: "none", borderRadius: "20px" }}
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
-                    <div className="">
+                    <div className="d-flex justify-content-end">
                         <input
                             type="search"
                             placeholder="Enter amount"
-                            className=" p-2" style={{border:'2px solid #49274A',outline:'none'}}
+                            className=" p-2 ps-3 w-75 border border-secondary"
+                            style={{ outline: "none", borderRadius: "20px" }}
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
@@ -215,16 +223,50 @@ function GetAllPets() {
                                         <h5>₹{item.amount}</h5>
                                     </Col>
                                     <Col sm="12" md="2">
-                                        <h3 className="pt-2" title="Pet LicenceID">{item.pId}</h3>
+                                        <h3 className="pt-2" title="Pet LicenceID">
+                                            {item.pId}
+                                        </h3>
                                         <h5>
-                                            <Badge bg="success p-2" title="Pet Status">{item.status}</Badge>
+                                            <Badge
+                                                bg=" p-1"
+                                                title="Pet Status"
+                                                style={{ backgroundColor: item.status === "Available" ? "green" : "red" }}
+                                            >
+                                                {item.status}
+                                            </Badge>
                                         </h5>
 
                                         <div className="d-flex justify-content-between">
-                                        
-                                            <button className="btn border border-danger btn-warning" title="Add to cart"  onClick={()=>HandleCart(item.pname,item.breed,item.amount,item.userid,item.p_image)}>Add to cart</button>
+                                            {item.status === "Available" ? (
+                                                <button
+                                                    className=" ps-3 pe-3 bg-dark text-light"
+                                                    title="Add to cart"
+                                                    style={{border:'none'}}
+                                                    onClick={() =>
+                                                        HandleCart(
+                                                            item.pname,
+                                                            item.breed,
+                                                            item.amount,
+                                                            item.userid,
+                                                            item.p_image,
+                                                            item.ID
+                                                        )
+                                                    }
+                                                >
+                                                    Add to cart
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className="ps-3 pe-3 bg-warning"
+                                                    style={{border:'none'}}
+                                                    title="Notify me"
+                                                 onClick={handleStock}
+                                                >
+                                                    Out Of Stock
+                                                </button>
+                                            )}
                                             <button
-                                            title="Delete"
+                                                title="Delete"
                                                 className="btn"
                                                 onClick={() => {
                                                     handleDelete(item._id);
@@ -233,14 +275,16 @@ function GetAllPets() {
                                                 <i class="fa-solid fa-trash-can" style={{ fontSize: "25px" }}></i>
                                             </button>
                                         </div>
-                                        
-                                        
                                     </Col>
-                                    <Col sm='12' md='1' className="d-flex align-items-end justify-content-end" title="Edit Pet Details">
-                                        <EditProject pet={item}/>
+                                    <Col
+                                        sm="12"
+                                        md="1"
+                                        className="d-flex align-items-end justify-content-end"
+                                        title="Edit Pet Details"
+                                    >
+                                        <EditProject pet={item} />
                                     </Col>
                                 </Row>
-                                
                             ))
                     ) : search.trim() !== "" ? (
                         <p className="text-danger text-center p-5 h4">No matching pets found for your search</p>
@@ -248,10 +292,9 @@ function GetAllPets() {
                         <p className="text-danger text-center p-5 h4">please wait. Loading....</p>
                     )}
                 </div>
-               
             </div>
             <div className="">
-            <Cart cart={cart} />
+                <Cart cart={cart} setCart={setCart} />
             </div>
         </div>
     );

@@ -1,40 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { BASE_URL } from "../service/baseUel";
 
-function Cart({ cart }) {
-  const [cartItems, setCartItems] = useState([]);
-  
+function Cart({ cart, setCart }) {
     useEffect(() => {
-        const storedData = localStorage.getItem("currentUser");
+        const storedData = localStorage.getItem("CartPets");
         if (storedData) {
             const parsedData = JSON.parse(storedData);
-            setCartItems(parsedData);
+            setCart(parsedData);
         }
     }, []);
-    useEffect(() => {
-       
-        setCartItems([
-          ...cartItems,
-       
-          {
-            pname: cart.pname || "",
-            breed: cart.breed || "",
-            amount: cart.amount || "",
-            p_image: cart.p_image || "",
-            userid: cart.userid || "",
-        }, ]);
-    }, [cart]);
 
+    const handleDelete = (index) => {
+        const updatedItems = cart.filter((item) => index !== item.Id);
+        setCart(updatedItems);
 
-
-    const handleRemove = (userid) => {
-      const updatedCart = cartItems.filter((item) => item.userid !== userid);
-      setCartItems(updatedCart);
+        localStorage.setItem("CartPets", JSON.stringify(updatedItems));
     };
-  
-    console.log(cartItems);
+
+    const handleAllRemove = () => {
+        setCart([]);
+        localStorage.removeItem("CartPets");
+        toast.success("Removed all items", {
+            style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#FFFF",
+            },
+        });
+    };
 
     return (
         <div className="mt-5 container">
@@ -53,57 +49,77 @@ function Cart({ cart }) {
 
                                             <hr className="my-4" />
 
-                                            {cart.map((item, index) => (
-                                                <Row
-                                                    key={index}
-                                                    className="mb-4 d-flex justify-content-between align-items-center"
-                                                >
-                                                    <Col md={2} lg={2} xl={2}>
-                                                        <img
-                                                            src={item.p_image}
-                                                            alt="no img"
-                                                            style={{ width: "100%", height: "auto" }}
-                                                        />
-                                                    </Col>
-                                                    <Col md={3} lg={3} xl={3}>
-                                                        <h6 className="text-muted">{item.pname}</h6>
-                                                        <h6 className="text-black mb-0">{item.breed}</h6>
-                                                    </Col>
-                                                    <Col md={3} lg={3} xl={3} className="d-flex align-items-center">
-                                                        <Button variant="link" className="px-2">
-                                                            <i class="fa-solid fa-minus"></i>
-                                                        </Button>
-                                                        <Form.Control
-                                                            type="number"
-                                                            min="0"
-                                                            defaultValue={item.quantity}
-                                                            value={1}
-                                                            size="sm"
-                                                        />
-                                                        <Button variant="link" className="px-2">
-                                                            <i class="fa-solid fa-plus"></i>
-                                                        </Button>
-                                                    </Col>
-                                                    <Col md={3} lg={2} xl={2} className="text-end">
-                                                        <h6 className="mb-0">{`₹ ${item.amount}`}</h6>
-                                                    </Col>
-                                                    <Col md={1} lg={1} xl={1} className="text-end">
-                                                       <span onClick={()=>handleRemove(item.userid)}>
-                                                       <i class="fa-solid fa-xmark" title="remove item"></i>
-                                                       </span>
-                                                           
-                                                        
-                                                    </Col>
-                                                    <hr className="my-4" />
-                                                </Row>
-                                            ))}
-                                            <div className="pt-5">
-                                                <h6 className="mb-0">
-                                                    <Link to={"/List"} className="text-dark">
-                                                        Back to shop{" "}
-                                                    </Link>
-                                                </h6>
-                                            </div>
+                                            {cart.length === 0 ? (
+                                                <>
+                                                    <p className="text-center text-danger h3">Your cart is empty.</p>
+                                                    <p className="text-center text-danger">
+                                                        {" "}
+                                                        <Link className="btn border-dark mt-4" to="/List">
+                                                            Continue shopping
+                                                        </Link>
+                                                    </p>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {cart.map((item, index) => (
+                                                        <Row
+                                                            key={index}
+                                                            className="mb-4 d-flex justify-content-between align-items-center"
+                                                        >
+                                                            <Col md={2} lg={2} xl={2}>
+                                                                <img
+                                                                    src={`${BASE_URL}/upload/${item.p_image}`}
+                                                                    alt="image"
+                                                                    className="shadow rounded"
+                                                                    height={50}
+                                                                    width={60}
+                                                                />
+                                                            </Col>
+                                                            <Col md={3} lg={3} xl={3}>
+                                                                <h6 className="text-muted">{item.pname}</h6>
+                                                                <h6 className="text-black mb-0">{item.breed}</h6>
+                                                            </Col>
+                                                            <Col md={3} lg={3} xl={3} className="d-flex align-items-center">
+                                                                <Button variant="link" className="px-2">
+                                                                    <i className="fa-solid fa-minus"></i>
+                                                                </Button>
+                                                                <Form.Control
+                                                                    type="number"
+                                                                    min="1"
+                                                                    defaultValue={item.quantity}
+                                                                    value={1}
+                                                                    size="sm"
+                                                                />
+                                                                <Button variant="link" className="px-2">
+                                                                    <i className="fa-solid fa-plus"></i>
+                                                                </Button>
+                                                            </Col>
+                                                            <Col md={3} lg={2} xl={2} className="text-end">
+                                                                <h6 className="mb-0">{`₹ ${item.amount}`}</h6>
+                                                            </Col>
+                                                            <Col md={1} lg={1} xl={1} className="text-end">
+                                                                <span onClick={() => handleDelete(item.Id)}>
+                                                                    <i
+                                                                        className="fa-solid fa-xmark"
+                                                                        title="remove item"
+                                                                    ></i>
+                                                                </span>
+                                                            </Col>
+                                                            <hr className="my-4" />
+                                                        </Row>
+                                                    ))}
+                                                    <div className="pt-5 d-flex justify-content-between">
+                                                        <h6 className="mb-0">
+                                                            <Link to={"/List"} className="text-dark">
+                                                                Back to shop{" "}
+                                                            </Link>
+                                                        </h6>
+                                                        <span className="btn border-dark" onClick={() => handleAllRemove()}>
+                                                            Clear cart
+                                                        </span>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                     </Col>
                                     <Col md={4}>
@@ -115,7 +131,7 @@ function Cart({ cart }) {
                                                 <ListGroup variant="flush">
                                                     <ListGroup.Item className="d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                                         Products
-                                                        <span>{/* Calculate total products cost */}0</span>
+                                                        <span>{/* Calculate total products cost */}</span>
                                                     </ListGroup.Item>
                                                     <ListGroup.Item className="d-flex justify-content-between align-items-center px-0">
                                                         Shipping
