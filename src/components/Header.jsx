@@ -2,9 +2,11 @@ import React from "react";
 import { Navbar, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import toast from "react-hot-toast";
 
 function Header({ loginL }) {
+    const userRole = localStorage.getItem("role");
+    const isAdmin = userRole === "admin";
+
     const closeNavbar = () => {
         const navbarToggle = document.querySelector(".navbar-toggler");
         if (navbarToggle) {
@@ -12,20 +14,8 @@ function Header({ loginL }) {
         }
     };
 
-    const handleLinkClick = () => {
-        toast(loginL ? "" : "You're not logged in! You must log in to access the page", {
-            icon: "⚠️",
-            style: {
-                borderRadius: "10px",
-                background: "#333",
-                color: "#FFFF00",
-            },
-        });
-    };
-
     return (
         <div style={{ backgroundColor: "#F4DECB" }}>
-
             {loginL ? (
                 <Navbar className="Navy container" collapseOnSelect expand="full">
                     <Navbar.Brand style={{ fontSize: "35px" }}>PetPulse</Navbar.Brand>
@@ -37,40 +27,26 @@ function Header({ loginL }) {
                                     Home
                                 </Link>
                             </Nav.Link>
-                            {loginL ? (
+
+                            {isAdmin ? (
+                                <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
+                                    <Link to={"/Admdash"} className="text-decoration-none text-dark">
+                                        Admin Dash
+                                    </Link>
+                                </Nav.Link>
+                            ) : (
                                 <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
                                     <Link to={"/Adopt"} className="text-decoration-none text-dark">
                                         Adopt a Pet
                                     </Link>
                                 </Nav.Link>
-                            ) : (
-                                <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
-                                    <Link
-                                        to={"/Login"}
-                                        className="text-decoration-none text-dark"
-                                        onClick={handleLinkClick}
-                                    >
-                                        Adopt a Pet
-                                    </Link>
-                                </Nav.Link>
                             )}
-                            {loginL ? (
-                                <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
-                                    <Link to={"/List"} className="text-decoration-none text-dark">
-                                        All pets
-                                    </Link>
-                                </Nav.Link>
-                            ) : (
-                                <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
-                                    <Link
-                                        to={"/Login"}
-                                        className="text-decoration-none text-dark"
-                                        onClick={handleLinkClick}
-                                    >
-                                        Adopt a Pet
-                                    </Link>
-                                </Nav.Link>
-                            )}
+                            <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
+                                <Link to={"/List"} className="text-decoration-none text-dark">
+                                    All pets
+                                </Link>
+                            </Nav.Link>
+
                             <Nav.Link style={{ fontSize: "20px", fontWeight: "600" }} onClick={closeNavbar}>
                                 {" "}
                                 <Link to={"/history"} className="text-decoration-none text-dark">

@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { Badge, Col, Row } from "react-bootstrap";
 import { deletePetApi, getAllPetss } from "../service/allApis";
 import { BASE_URL } from "../service/baseUel";
-import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import EditProject from "./EditProject";
 import { addPetResponseContect } from "../context/ContextShare";
 import Cart from "./Cart";
+import blob2 from "../assets/blob (2).png";
 
 const getLocalItems = () => {
     let list = localStorage.getItem("CartPets");
@@ -19,6 +19,8 @@ const getLocalItems = () => {
 };
 
 function GetAllPets() {
+    const userRole = localStorage.getItem("role");
+    const isAdmin = userRole === "admin";
     const [search, setSearch] = useState("");
 
     const [token, setToken] = useState("");
@@ -121,35 +123,19 @@ function GetAllPets() {
     };
     // console.log(cart);
 
-    const handleStock=()=>{
-        toast("This item is currently out of stock",
-        {
-          icon: '⚠️',
-          style: {
-            borderRadius: '10px',
-            background: '#333',
-            color: '#FFFF00',
-          },
-        })
-    }
+    const handleStock = () => {
+        toast("This item is currently out of stock", {
+            icon: "⚠️",
+            style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#FFFF00",
+            },
+        });
+    };
     return (
         <div>
-            <div className=" d-flex justify-content-end container mb-5">
-                <Link
-                    to={"/cart"}
-                    className="text-decoration-none border p-3 text-dark"
-                    style={{ borderRadius: "50%", cursor: "not-allowed " }}
-                >
-                    <i class="fa-solid fa-cart-shopping" style={{ fontSize: "16px" }}></i>
-                    <span
-                        className="text-light ps-2 pe-2 p-1 bg-dark "
-                        style={{ borderRadius: "50%", position: "absolute", fontSize: "12px" }}
-                    >
-                        {cart.length}
-                    </span>
-                </Link>
-            </div>
-            <div>
+            <div className="mt-5">
                 <div className=" d-flex justify-content-between container mb-4">
                     <div className="w-75">
                         <input
@@ -170,6 +156,7 @@ function GetAllPets() {
                         />
                     </div>
                 </div>
+
                 <div className="container mt-3 ">
                     {allPet.length > 0 ? (
                         allPet
@@ -223,25 +210,27 @@ function GetAllPets() {
                                         <h5>₹{item.amount}</h5>
                                     </Col>
                                     <Col sm="12" md="2">
-                                        <h3 className="pt-2" title="Pet LicenceID">
+                                        <h3 className="pt-4 mb-4" title="Pet LicenceID">
                                             {item.pId}
                                         </h3>
-                                        <h5>
-                                            <Badge
-                                                bg=" p-1"
-                                                title="Pet Status"
-                                                style={{ backgroundColor: item.status === "Available" ? "green" : "red" }}
-                                            >
-                                                {item.status}
-                                            </Badge>
-                                        </h5>
+                                        {/* <Badge
+                                            pill
+                                            bg=" p-2 "
+                                            title="Pet Status"
+                                            style={{
+                                                backgroundColor: item.status === "Available" ? "green" : "red",
+                                                fontSize: "11px",
+                                            }}
+                                        >
+                                            {item.status}
+                                        </Badge> */}
 
-                                        <div className="d-flex justify-content-between">
+                                        <div className="d-flex justify-content-between ">
                                             {item.status === "Available" ? (
                                                 <button
-                                                    className=" ps-3 pe-3 bg-dark text-light"
+                                                    className=" ps-3 pe-3 text-light shadow"
                                                     title="Add to cart"
-                                                    style={{border:'none'}}
+                                                    style={{ border: "none", backgroundColor: "#49274A" }}
                                                     onClick={() =>
                                                         HandleCart(
                                                             item.pname,
@@ -257,10 +246,10 @@ function GetAllPets() {
                                                 </button>
                                             ) : (
                                                 <button
-                                                    className="ps-3 pe-3 bg-warning"
-                                                    style={{border:'none'}}
+                                                    className="ps-3 pe-3 bg-warning shadow"
+                                                    style={{ border: "none" }}
                                                     title="Notify me"
-                                                 onClick={handleStock}
+                                                    onClick={handleStock}
                                                 >
                                                     Out Of Stock
                                                 </button>
@@ -279,10 +268,32 @@ function GetAllPets() {
                                     <Col
                                         sm="12"
                                         md="1"
-                                        className="d-flex align-items-end justify-content-end"
+                                        className="d-flex align-items-end mb-3 justify-content-end"
                                         title="Edit Pet Details"
                                     >
-                                        <EditProject pet={item} />
+                                        {isAdmin ? (
+                                            <EditProject pet={item} />
+                                        ) : (
+                                            <Badge
+                                                pill
+                                                bg=" p-2 "
+                                                style={{
+                                                    backgroundColor: "Approved" ? "green" : "red",
+                                                    fontSize: "11px",
+                                                }}
+                                            >
+                                                Approved
+                                            </Badge>
+                                            // <button
+                                            //     title="Request"
+                                            //     className="btn border-dark"
+                                            //     onClick={() => {
+                                            //         // Handle user request logic here
+                                            //     }}
+                                            // >
+                                            //     Request
+                                            // </button>
+                                        )}
                                     </Col>
                                 </Row>
                             ))
@@ -293,6 +304,7 @@ function GetAllPets() {
                     )}
                 </div>
             </div>
+            <img src={blob2} alt="" style={{ position: "absolute" }} />
             <div className="">
                 <Cart cart={cart} setCart={setCart} />
             </div>

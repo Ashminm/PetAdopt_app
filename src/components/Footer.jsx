@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import blob from "../assets/blob.png";
 
 function Footer({ loginL }) {
     return (
@@ -22,7 +23,13 @@ function Footer({ loginL }) {
                         </Link>
 
                         {loginL ? (
-                            <Link to={'/Adopt'} className="text-decoration-none text-light p-1" style={{fontSize:'18px'}} >Adopt</Link>
+                            <Link
+                                to={"/Adopt"}
+                                className="text-decoration-none text-light p-1"
+                                style={{ fontSize: "18px" }}
+                            >
+                                Adopt
+                            </Link>
                         ) : (
                             <Link
                                 to={"/Login"}
@@ -33,7 +40,9 @@ function Footer({ loginL }) {
                             </Link>
                         )}
                         {loginL ? (
-                            <Link to={'/List'} className="text-decoration-none text-light p-1" style={{fontSize:'18px'}} >Pets</Link>
+                            <Link to={"/List"} className="text-decoration-none text-light p-1" style={{ fontSize: "18px" }}>
+                                Pets
+                            </Link>
                         ) : (
                             <Link
                                 to={"/Login"}
@@ -69,7 +78,10 @@ function Footer({ loginL }) {
                             A108 Willa Street <br /> Mumbai, NY 535022 <br /> India
                         </p>
                     </Col>
-                    <Col sm="12" md="1"></Col>
+                    <Col sm="12" md="1">
+                        {" "}
+                        <img src={blob} alt="" style={{ position: "absolute" }} />
+                    </Col>
                     <Col sm="12" md="2">
                         <a href="#">
                             <i
@@ -92,6 +104,7 @@ function Footer({ loginL }) {
                         </a>
                     </Col>
                 </Row>
+
                 <hr />
                 <p style={{ textAlign: "center", fontSize: "18px", padding: "20px" }}>
                     Copyright &#169; PetPulse.All right reserved.

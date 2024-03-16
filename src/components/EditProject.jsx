@@ -1,56 +1,67 @@
-import React, { useState,useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { BASE_URL } from "../service/baseUel";
 import toast from "react-hot-toast";
 import { editPetApi } from "../service/allApis";
 import { addPetResponseContect } from "../context/ContextShare";
 
-
-function EditProject({pet}) {
+function EditProject({ pet }) {
     const [show, setShow] = useState(false);
 
-    const {addPetResponse,setAddPetResponse}=useContext(addPetResponseContect)
+    const { addPetResponse, setAddPetResponse } = useContext(addPetResponseContect);
 
-    const [editPet,setEditPet]=useState({
-        pname:pet.pname,
-        overview:pet.overview,
-        age:pet.age,
-        color:pet.color,
-        breed:pet.breed,
-        gender:pet.gender,
-        Weight:pet.Weight,
-        status:pet.status,
-        pId:pet.pId,
-        p_image:pet.p_image,
-        amount:pet.amount,
-        number:pet.number,
-        categories:pet.categories
-    })
+    const [editPet, setEditPet] = useState({
+        pname: pet.pname,
+        overview: pet.overview,
+        age: pet.age,
+        color: pet.color,
+        breed: pet.breed,
+        gender: pet.gender,
+        Weight: pet.Weight,
+        status: pet.status,
+        pId: pet.pId,
+        p_image: pet.p_image,
+        amount: pet.amount,
+        number: pet.number,
+        categories: pet.categories,
+    });
 
     const [preview, setPreview] = useState("");
     useEffect(() => {
-        if (editPet.p_image  != pet.p_image) {
+        if (editPet.p_image != pet.p_image) {
             setPreview(URL.createObjectURL(editPet.p_image));
         }
     }, [editPet.p_image]);
 
-
-    const handleUpdate=async()=>{
-        const {pname,overview,age,color,breed,gender,Weight,status,pId,amount,p_image,number,categories}= editPet
-        if(!pname || !overview || !age || !color || !breed || !gender || !Weight || !status || !pId || !amount || !p_image || !number || !categories){
-            toast("Enter Valid Correct Details!!",
-            {
-              icon: '⚠️',
-              style: {
-                borderRadius: '10px',
-                background: '#333',
-                color: '#FFFF00',
-              },
-            })
-        }
-        else{
+    const handleUpdate = async () => {
+        const { pname, overview, age, color, breed, gender, Weight, status, pId, amount, p_image, number, categories } =
+            editPet;
+        if (
+            !pname ||
+            !overview ||
+            !age ||
+            !color ||
+            !breed ||
+            !gender ||
+            !Weight ||
+            !status ||
+            !pId ||
+            !amount ||
+            !p_image ||
+            !number ||
+            !categories
+        ) {
+            toast("Enter Valid Correct Details!!", {
+                icon: "⚠️",
+                style: {
+                    borderRadius: "10px",
+                    background: "#333",
+                    color: "#FFFF00",
+                },
+            });
+        } else {
             // toast.success("Valid");
-            const reqBody=new FormData()
+            const reqBody = new FormData();
             reqBody.append("pname", editPet.pname);
             reqBody.append("overview", editPet.overview);
             reqBody.append("age", editPet.age);
@@ -64,154 +75,166 @@ function EditProject({pet}) {
             reqBody.append("amount", editPet.amount);
             reqBody.append("number", editPet.number);
             reqBody.append("categories", editPet.categories);
-            if(p_image==pet.p_image){
+            if (p_image == pet.p_image) {
                 const reqHeader = {
-                    "Content-Type": "application/json" ,
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 };
-                const res=await editPetApi(reqHeader,reqBody,pet._id)
-                if(res.status===200){
-                    setAddPetResponse(res.data)
-                    toast.success("Pet details updated",{
+                const res = await editPetApi(reqHeader, reqBody, pet._id);
+                if (res.status === 200) {
+                    setAddPetResponse(res.data);
+                    toast.success("Pet details updated", {
                         style: {
-                          borderRadius: '10px',
-                          background: '#333',
-                          color: '#FFFF',
+                            borderRadius: "10px",
+                            background: "#333",
+                            color: "#FFFF",
                         },
-                      })
-                    handleClose()
+                    });
+                    handleClose();
+                } else {
+                    toast.error(res.response.data);
                 }
-                else{
-                    toast.error(res.response.data)
-                }
-            }
-            else{
+            } else {
                 const reqHeader = {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 };
-                const res=await editPetApi(reqHeader,reqBody,pet._id)
-                if(res.status===200){
-                    setAddPetResponse(res.data)
-                    toast.success("Pet details updated",{
+                const res = await editPetApi(reqHeader, reqBody, pet._id);
+                if (res.status === 200) {
+                    setAddPetResponse(res.data);
+                    toast.success("Pet details updated", {
                         style: {
-                          borderRadius: '10px',
-                          background: '#333',
-                          color: '#FFFF',
+                            borderRadius: "10px",
+                            background: "#333",
+                            color: "#FFFF",
                         },
-                      })
-                    handleClose()
-                }
-                else{
-                    toast.error(res.response.data)
+                    });
+                    handleClose();
+                } else {
+                    toast.error(res.response.data);
                 }
             }
         }
-
-    }
-
-
+    };
 
     const handleClose = () => {
         setShow(false);
-        setPreview("")
-    }
+        setPreview("");
+    };
     const handleShow = () => setShow(true);
 
     // console.log(editPet);
     return (
         <div>
             <Button variant="" onClick={handleShow}>
-            <i class="fa-solid fa-file-pen "  style={{fontSize:"25px",color:"#94619E"}}></i>
+                <i class="fa-solid fa-file-pen " style={{ fontSize: "25px", color: "#94619E" }}></i>
             </Button>
 
-            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} dialogClassName="custom-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Edit Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div>
                         <label htmlFor="project">
-                            <input type="file" id="project" style={{ display: "none" }} onChange={(e)=>setEditPet({...editPet,p_image:e.target.files[0]})}/>
+                            <input
+                                type="file"
+                                id="project"
+                                style={{ display: "none" }}
+                                onChange={(e) => setEditPet({ ...editPet, p_image: e.target.files[0] })}
+                            />
                             <img
-                                src={preview? preview:`${BASE_URL}/upload/${pet.p_image}`}
+                                src={preview ? preview : `${BASE_URL}/upload/${pet.p_image}`}
                                 className="img-fluid"
                                 alt="no image"
                             />
                         </label>
                     </div>
                     <div className=" mt-3">
-                    <Form>
+                        <Form>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet Name"
                                     defaultValue={pet.pname}
-                                    onChange={(e)=>setEditPet({...editPet,pname:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, pname: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                 <Form.Control
                                     as="textarea"
+                                    id="Transparant"
                                     rows={2}
                                     placeholder="Pet Overview"
                                     defaultValue={pet.overview}
-                                    onChange={(e)=>setEditPet({...editPet,overview:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, overview: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Approximate Age"
                                     defaultValue={pet.age}
-                                    onChange={(e)=>setEditPet({...editPet,age:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, age: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet breed"
                                     defaultValue={pet.breed}
-                                    onChange={(e)=>setEditPet({...editPet,breed:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, breed: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
-                                    placeh defaultValue={pet.color}older="Pet color"
-                                    onChange={(e)=>setEditPet({...editPet,color:e.target.value})}
+                                    id="Transparant"
+                                    placeholder="Pet color"
+                                    defaultValue={pet.color}
+                                    
+                                    onChange={(e) => setEditPet({ ...editPet, color: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet gender"
                                     defaultValue={pet.gender}
-                                    onChange={(e)=>setEditPet({...editPet,gender:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, gender: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet Weight"
                                     defaultValue={pet.Weight}
-                                    onChange={(e)=>setEditPet({...editPet,Weight:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, Weight: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet Status"
                                     defaultValue={pet.status}
-                                    onChange={(e)=>setEditPet({...editPet,status:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, status: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Select
+                            id="Transparant"
                                 aria-label="Default select example"
-                                onChange={(e)=>setEditPet({...editPet,categories:e.target.value})}
+                                onChange={(e) => setEditPet({ ...editPet, categories: e.target.value })}
                             >
                                 {/* onChange={handleCategoryChange} */}
-                                <option disabled selected>categories</option>
+                                <option disabled selected>
+                                    categories
+                                </option>
                                 <option value="Dog">Dog</option>
                                 <option value="Cat">Cat</option>
                                 <option value="Deer">Deer</option>
@@ -219,6 +242,7 @@ function EditProject({pet}) {
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput4">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet license ID"
                                     defaultValue={pet.pId}
                                     // onChange={(e)=>setEditPet({...editPet,pId:e.target.value.toUpperCase()})}
@@ -228,24 +252,28 @@ function EditProject({pet}) {
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput5">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Enter Your Amount"
                                     defaultValue={pet.amount}
-                                    onChange={(e)=>setEditPet({...editPet,amount:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, amount: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput5">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Contact number"
                                     defaultValue={pet.number}
-                                    onChange={(e)=>setEditPet({...editPet,number:e.target.value})}
+                                    onChange={(e) => setEditPet({ ...editPet, number: e.target.value })}
                                 />
                             </Form.Group>
                         </Form>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="dark" onClick={handleUpdate}>Submit</Button>
+                    <Button variant="dark" onClick={handleUpdate}>
+                        Submit
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>

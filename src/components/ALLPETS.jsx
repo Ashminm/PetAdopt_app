@@ -3,7 +3,7 @@ import { userPets } from "../service/allApis";
 
 function ALLPETS() {
     const [token, setToken] = useState("");
-    const [search,setSearch] = useState("")
+    const [search, setSearch] = useState("");
     const [pets, setPets] = useState([]);
 
     useEffect(() => {
@@ -31,10 +31,9 @@ function ALLPETS() {
         }
     };
     // console.log(pets);
-console.log(search);
+    console.log(search);
     return (
         <div>
-
             {/* ---------------------old Admin Add pet List---------------------Not using---------------- */}
             {/* <div>
             
@@ -90,7 +89,6 @@ console.log(search);
                     )}
                 </div>
             </div> */}
-          
         </div>
     );
 }

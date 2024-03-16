@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import HowToAdopt from "./HowToAdopt";
 import { Form } from "react-bootstrap";
-import Img1 from "../assets/blob.png";
 import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
+import blob2 from "../assets/blob (2).png";
+import blob from "../assets/blob.png";
 
 function AllContact() {
     const form = useRef();
@@ -40,7 +41,7 @@ function AllContact() {
 
     return (
         <div className="">
-            <img src={Img1} alt="" style={{ position: "absolute" }} />
+            <img src={blob2} alt="" style={{ position: "absolute" }} />
             <div
                 className="text-dark text-center p-5 d-flex flex-column justify-content-center align-items-center"
                 style={{ backgroundColor: "#F4DECB", height: "80vh" }}
@@ -104,6 +105,7 @@ function AllContact() {
                         Send
                     </button>
                 </Form>
+                <img src={blob} alt="" style={{ position: "absolute",zIndex:'-1'  }} />
             </div>
             <div className="container mt-5">
                 <HowToAdopt />

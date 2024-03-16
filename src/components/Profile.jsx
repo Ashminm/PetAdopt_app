@@ -4,6 +4,7 @@ import { profileUpdateApi } from "../service/allApis";
 import { BASE_URL } from "../service/baseUel";
 import toast from "react-hot-toast";
 import { Button, Modal } from "react-bootstrap";
+
 function Profile() {
     const [profile, setProfile] = useState({
         username: JSON.parse(localStorage.getItem("currentUser")).username,
@@ -205,15 +206,25 @@ function Profile() {
                     <div className="mt-1 mb-3 w-75 btn btn-dark p-2" onClick={handleShow}>
                         Logout
                     </div>
-                    <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} centered  size="sm">
+                    <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} centered size="sm" dialogClassName="custom-modal">
                         <Modal.Body>
                             <div className="p-3">
                                 <div className="">
                                     <h3 className="pb-2">Log out?</h3>
                                 </div>
-                                <div className="pb-3"><p>Are you sure want to log out? <span className="text-danger">{profile.username}</span> </p></div>
+                                <div className="pb-3">
+                                    <p>
+                                        Are you sure want to log out?{" "}
+                                        <span className="text-danger">{profile.username}</span>{" "}
+                                    </p>
+                                </div>
                                 <div className="d-flex justify-content-around">
-                                    <Button variant="light" className="border border-dark ms-4  ps-3 pe-3 pt-2 pb-2" onClick={handleClose}>
+                                    <Button
+                                        variant="light"
+                                        id="Transparant"
+                                        className="border border-dark ms-4  ps-3 pe-3 pt-2 pb-2"
+                                        onClick={handleClose}
+                                    >
                                         Cancel
                                     </Button>
                                     <Button variant="dark" className="me-4 ps-3 pe-3 pt-2 pb-2" onClick={handleLogout}>
@@ -222,7 +233,11 @@ function Profile() {
                                 </div>
                             </div>
                         </Modal.Body>
-                        <i><p className="text-end pe-4" style={{fontSize:"10px"}}>User</p></i>
+                        <i>
+                            <p className="text-end pe-4" style={{ fontSize: "10px" }}>
+                                User
+                            </p>
+                        </i>
                     </Modal>
                 </div>
             </div>

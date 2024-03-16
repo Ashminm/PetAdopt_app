@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 import conOne from "../assets/image-card.png";
 import { Link } from "react-router-dom";
-function DirectCon({loginL}) {
+function DirectCon({ loginL }) {
     return (
         <div className="pt-5 pb-5 container">
             <Row style={{ alignItems: "center" }}>
@@ -29,28 +29,24 @@ function DirectCon({loginL}) {
                         for both you and your new companion. Contact us now to start the rewarding journey of pet
                         parenthood!
                     </p>
-                    {
-                        loginL ? (
-                            <Link
+                    {loginL ? (
+                        <Link
                             to={"/List"}
                             className="btn text-light ps-5 pt-3 pb-3 pe-5 shadow mt-4"
                             style={{ backgroundColor: "#49274A", borderRadius: "50px" }}
                             title="Review pets after purcase"
                         >
-                              Review
+                            Review
                         </Link>
-                        ) : (
-                            <Link
+                    ) : (
+                        <Link
                             to={"/Contact"}
                             className="btn text-light ps-5 pt-3 pb-3 pe-5 shadow mt-4"
                             style={{ backgroundColor: "#49274A", borderRadius: "50px" }}
                         >
                             Contact
-                          
                         </Link>
-                        )
-                    }
-                   
+                    )}
                 </Col>
             </Row>
         </div>

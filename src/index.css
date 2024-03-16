@@ -20,3 +20,13 @@
     background: url("https://static.thenounproject.com/png/101791-200.png") no-repeat left;
     background-size: 20px;
   }
+  .custom-modal {
+    .modal-content {
+        background-image: linear-gradient(#94619e8f ,#f4decb86)
+    }
+  }
+
+  #Transparant{
+    background-color: transparent;
+   border: 1px solid #000000a8;
+}

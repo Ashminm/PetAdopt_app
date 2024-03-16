@@ -26,7 +26,6 @@ function Dashboard() {
             <div className=" mt-5 mb-5 container rounded shadow" style={{ backgroundColor: "#F8EEE7" }}>
                 <History />
             </div>
-            
         </div>
     );
 }

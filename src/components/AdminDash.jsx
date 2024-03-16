@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Col, Row, Dropdown, Image } from "react-bootstrap";
 import MyProject from "./MyProject";
-import Profile from "./Profile";
 import AdminProfile from "./AdminProfile";
 
 function AdminDash() {
@@ -20,13 +19,10 @@ function AdminDash() {
                     <h3 className="p-3">
                         Hello <span style={{ color: "#94619E" }}>{adprofile.username} </span>👋
                     </h3>
+
                     <MyProject />
                 </Col>
-               
             </Row>
-            <div className="">
-                
-            </div>
         </div>
     );
 }

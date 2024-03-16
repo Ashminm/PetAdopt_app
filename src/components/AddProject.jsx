@@ -151,7 +151,7 @@ function AddProject() {
                 <i class="fa-solid fa-circle-plus p-0" style={{ fontSize: "45px", color: "#94619E" }}></i>
             </Button>
 
-            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} dialogClassName="custom-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Add Pet</Modal.Title>
                 </Modal.Header>
@@ -181,6 +181,7 @@ function AddProject() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet Name"
                                     onChange={(e) => setPetDetails({ ...petDetails, pname: e.target.value })}
                                 />
@@ -188,6 +189,7 @@ function AddProject() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                 <Form.Control
                                     as="textarea"
+                                    id="Transparant"
                                     rows={2}
                                     placeholder="Pet Overview"
                                     onChange={(e) => setPetDetails({ ...petDetails, overview: e.target.value })}
@@ -196,6 +198,7 @@ function AddProject() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Approximate Age"
                                     onChange={(e) => setPetDetails({ ...petDetails, age: e.target.value })}
                                 />
@@ -203,6 +206,7 @@ function AddProject() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet breed"
                                     onChange={(e) => setPetDetails({ ...petDetails, breed: e.target.value })}
                                 />
@@ -210,6 +214,7 @@ function AddProject() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet color"
                                     onChange={(e) => setPetDetails({ ...petDetails, color: e.target.value })}
                                 />
@@ -217,6 +222,7 @@ function AddProject() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet gender"
                                     onChange={(e) => setPetDetails({ ...petDetails, gender: e.target.value })}
                                 />
@@ -224,6 +230,7 @@ function AddProject() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet Weight"
                                     onChange={(e) => setPetDetails({ ...petDetails, Weight: e.target.value })}
                                 />
@@ -231,17 +238,18 @@ function AddProject() {
                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet Status"
                                     onChange={(e) => setPetDetails({ ...petDetails, status: e.target.value })}
                                 />
                             </Form.Group>
                             <Form.Select
+                            id="Transparant"
                                 aria-label="Default select example"
                                 onChange={(e) => setPetDetails({ ...petDetails, categories: e.target.value })}
                             >
-                                {/* onChange={handleCategoryChange} */}
-                                <option disabled selected>categories</option>
-                                <option value="Dog">Dog</option>
+                                <option disabled selected >categories</option>
+                                <option value="Dog" >Dog</option>
                                 <option value="Cat">Cat</option>
                                 <option value="Deer">Deer</option>
                                 <option value="Deer">Squral</option>
@@ -249,6 +257,7 @@ function AddProject() {
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput4">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Pet license ID"
                                     onChange={(e) => setPetDetails({ ...petDetails, pId: e.target.value.toUpperCase() })}
                                 />
@@ -256,6 +265,7 @@ function AddProject() {
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput5">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Enter Your Amount"
                                     onChange={(e) => setPetDetails({ ...petDetails, amount: e.target.value })}
                                 />
@@ -263,6 +273,7 @@ function AddProject() {
                             <Form.Group className="mt-3" controlId="exampleForm.ControlInput5">
                                 <Form.Control
                                     type="text"
+                                    id="Transparant"
                                     placeholder="Contact Number"
                                     onChange={(e) => setPetDetails({ ...petDetails, number: e.target.value })}
                                 />

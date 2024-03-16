@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Card, Col, Container, ListGroup, Row, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { BASE_URL } from "../service/baseUel";
 
@@ -11,13 +11,29 @@ function Cart({ cart, setCart }) {
             const parsedData = JSON.parse(storedData);
             setCart(parsedData);
         }
-    }, []);
+    }, [setCart]);
 
-    const handleDelete = (index) => {
-        const updatedItems = cart.filter((item) => index !== item.Id);
-        setCart(updatedItems);
-
-        localStorage.setItem("CartPets", JSON.stringify(updatedItems));
+    const handleDelete = (itemId) => {
+        const updatedItems = cart.filter((item) => itemId !== item.Id);
+        if (updatedItems) {
+            setCart(updatedItems);
+            localStorage.setItem("CartPets", JSON.stringify(updatedItems));
+            toast.success("Item successfully removed!", {
+                style: {
+                    borderRadius: "10px",
+                    background: "#333",
+                    color: "#FFFF",
+                },
+            });
+        } else {
+            toast.error("Failed to remove item.", {
+                style: {
+                    borderRadius: "10px",
+                    background: "#333",
+                    color: "#bb2124",
+                },
+            });
+        }
     };
 
     const handleAllRemove = () => {
@@ -32,9 +48,33 @@ function Cart({ cart, setCart }) {
         });
     };
 
+    const totalAmount = cart.reduce((total, item) => {
+        const itemAmount = parseFloat(item.amount);
+        return isNaN(itemAmount) ? total : total + itemAmount;
+    }, 0).toLocaleString('en-IN');
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     return (
         <div className="mt-5 container">
             <Container className="py-5">
+                <div className="d-flex justify-content-end">
+                    {/* <Link
+                    to={"/cart"}
+                    className="text-decoration-none border p-3 text-dark"
+                    style={{ borderRadius: "50%", cursor: "not-allowed " }}
+                > */}
+                    <i class="fa-solid fa-cart-shopping" style={{ fontSize: "33px" }}></i>
+                    <span
+                        className="text-dark ps-2 pe-2 p-1 bg-light "
+                        style={{ borderRadius: "50%", position: "absolute", fontSize: "12px" }}
+                    >
+                        {cart.length}
+                    </span>
+                    {/* </Link> */}
+                </div>
                 <Row className="justify-content-center align-items-center">
                     <Col xs={12}>
                         <Card className="card-registration card-registration-2" style={{ borderRadius: "15px" }}>
@@ -44,7 +84,7 @@ function Cart({ cart, setCart }) {
                                         <div className="p-5">
                                             <div className="d-flex justify-content-between align-items-center mb-5">
                                                 <h1 className="fw-bold mb-0 text-black">My Cart</h1>
-                                                <p className="mb-0 text-muted">{cart.length} items</p>
+                                                <p className="mb-0 text-muted">{cart?.length ?? 0} items</p>
                                             </div>
 
                                             <hr className="my-4" />
@@ -75,29 +115,14 @@ function Cart({ cart, setCart }) {
                                                                     width={60}
                                                                 />
                                                             </Col>
-                                                            <Col md={3} lg={3} xl={3}>
+                                                            <Col md={4} lg={4} xl={6}>
                                                                 <h6 className="text-muted">{item.pname}</h6>
                                                                 <h6 className="text-black mb-0">{item.breed}</h6>
                                                             </Col>
-                                                            <Col md={3} lg={3} xl={3} className="d-flex align-items-center">
-                                                                <Button variant="link" className="px-2">
-                                                                    <i className="fa-solid fa-minus"></i>
-                                                                </Button>
-                                                                <Form.Control
-                                                                    type="number"
-                                                                    min="1"
-                                                                    defaultValue={item.quantity}
-                                                                    value={1}
-                                                                    size="sm"
-                                                                />
-                                                                <Button variant="link" className="px-2">
-                                                                    <i className="fa-solid fa-plus"></i>
-                                                                </Button>
-                                                            </Col>
-                                                            <Col md={3} lg={2} xl={2} className="text-end">
+                                                            <Col md={3} lg={2} xl={2} className="text-start">
                                                                 <h6 className="mb-0">{`₹ ${item.amount}`}</h6>
                                                             </Col>
-                                                            <Col md={1} lg={1} xl={1} className="text-end">
+                                                            <Col md={1} lg={1} xl={1} className="text-center">
                                                                 <span onClick={() => handleDelete(item.Id)}>
                                                                     <i
                                                                         className="fa-solid fa-xmark"
@@ -114,15 +139,18 @@ function Cart({ cart, setCart }) {
                                                                 Back to shop{" "}
                                                             </Link>
                                                         </h6>
-                                                        <span className="btn border-dark" onClick={() => handleAllRemove()}>
-                                                            Clear cart
+                                                        <span
+                                                            className="btn border-danger text-danger"
+                                                            onClick={() => handleAllRemove()}
+                                                        >
+                                                            Remove all
                                                         </span>
                                                     </div>
                                                 </>
                                             )}
                                         </div>
                                     </Col>
-                                    <Col md={4}>
+                                    <Col md={4} sm={12}>
                                         <Card className="mb-4">
                                             <Card.Header>
                                                 <h5 className="mb-0">Summary</h5>
@@ -131,11 +159,11 @@ function Cart({ cart, setCart }) {
                                                 <ListGroup variant="flush">
                                                     <ListGroup.Item className="d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                                         Products
-                                                        <span>{/* Calculate total products cost */}</span>
+                                                        <span>{cart.length}</span>
                                                     </ListGroup.Item>
                                                     <ListGroup.Item className="d-flex justify-content-between align-items-center px-0">
                                                         Shipping
-                                                        <span>Pulse</span>
+                                                        <span>Pulse free</span>
                                                     </ListGroup.Item>
                                                     <ListGroup.Item className="d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                                                         <div>
@@ -145,7 +173,7 @@ function Cart({ cart, setCart }) {
                                                             </strong>
                                                         </div>
                                                         <span>
-                                                            <strong>{/* Calculate total amount */}0</strong>
+                                                            <span>₹ {totalAmount}</span>
                                                         </span>
                                                     </ListGroup.Item>
                                                 </ListGroup>
@@ -153,12 +181,23 @@ function Cart({ cart, setCart }) {
                                                 <Card.Footer>
                                                     <Row>
                                                         <Col>
-                                                            <Card.Link
-                                                                href="#"
-                                                                className="btn bg-dark text-light ps-5 pe-5 btn-lg btn-block"
+                                                            <button className="btn btn-dark w-100 p-2" onClick={handleShow}>
+                                                            <i class="fa-solid fa-bolt pe-1"></i> Checkout
+                                                            </button>
+                                                            <Modal
+                                                                show={show}
+                                                                onHide={handleClose}
+                                                                backdrop="static"
+                                                                keyboard={false}
+                                                                centered
+                                                                size="sm"
+                                                                dialogClassName="custom-modal"
                                                             >
-                                                                Go to checkout
-                                                            </Card.Link>
+                                                                <Modal.Header closeButton className="p-4">
+                                                                    <p className="p-1 h1">🛍️</p>
+                                                                    <p className="pt-3 h6">Order placed successfully!!</p>
+                                                                </Modal.Header>
+                                                            </Modal>
                                                         </Col>
                                                     </Row>
                                                 </Card.Footer>
