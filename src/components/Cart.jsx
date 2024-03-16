@@ -80,7 +80,7 @@ function Cart({ cart, setCart }) {
                         <Card className="card-registration card-registration-2" style={{ borderRadius: "15px" }}>
                             <Card.Body className="p-0">
                                 <Row className="g-0">
-                                    <Col lg={8}>
+                                    <Col lg={8} md={7}>
                                         <div className="p-5">
                                             <div className="d-flex justify-content-between align-items-center mb-5">
                                                 <h1 className="fw-bold mb-0 text-black">My Cart</h1>
@@ -106,7 +106,7 @@ function Cart({ cart, setCart }) {
                                                             key={index}
                                                             className="mb-4 d-flex justify-content-between align-items-center"
                                                         >
-                                                            <Col md={2} lg={2} xl={2}>
+                                                            <Col md={2} lg={2} xl={2} sm={3}  xs={6}>
                                                                 <img
                                                                     src={`${BASE_URL}/upload/${item.p_image}`}
                                                                     alt="image"
@@ -115,14 +115,14 @@ function Cart({ cart, setCart }) {
                                                                     width={60}
                                                                 />
                                                             </Col>
-                                                            <Col md={4} lg={4} xl={6}>
+                                                            <Col md={4} lg={4} xl={6} sm={4}  xs={6}>
                                                                 <h6 className="text-muted">{item.pname}</h6>
                                                                 <h6 className="text-black mb-0">{item.breed}</h6>
                                                             </Col>
-                                                            <Col md={3} lg={2} xl={2} className="text-start">
+                                                            <Col md={3} lg={2} xl={2}  sm={4}  xs={7} className="text-start">
                                                                 <h6 className="mb-0">{`₹ ${item.amount}`}</h6>
                                                             </Col>
-                                                            <Col md={1} lg={1} xl={1} className="text-center">
+                                                            <Col md={1} lg={1} xl={1} sm={1}  xs={1} className="text-center">
                                                                 <span onClick={() => handleDelete(item.Id)}>
                                                                     <i
                                                                         className="fa-solid fa-xmark"
@@ -150,7 +150,7 @@ function Cart({ cart, setCart }) {
                                             )}
                                         </div>
                                     </Col>
-                                    <Col md={4} sm={12}>
+                                    <Col md={5} sm={12}  xs={12} lg={4}>
                                         <Card className="mb-4">
                                             <Card.Header>
                                                 <h5 className="mb-0">Summary</h5>
