@@ -49,7 +49,7 @@ function Auth({ register }) {
                 setUserData({ username: "", password: "", email: "" });
                 navigate("/Login");
             } else {
-                toast.error(res.response.data, {
+                toast.error("Something Went Wrong : server based ",  {
                     style: {
                         borderRadius: "10px",
                         background: "#333",
