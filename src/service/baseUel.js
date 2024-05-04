@@ -1,4 +1,3 @@
-export const BASE_URL = "ashminms-projects/pet-adopt-app-server"
+export const BASE_URL = "https://petadopt-app-server.onrender.com"
 
 // http://localhost:4000
-// ashminms-projects/pet-adopt-app-server
